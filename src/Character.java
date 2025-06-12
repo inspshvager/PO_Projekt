@@ -70,6 +70,10 @@ public class Character extends Entity{
         this.speed = speed;
     }
 
+    public String saveToFile(){
+        return name + ";" + hp + ";" + mp + ";" + attack + ";" + defense + ";" + magicAttack + ";" + magicDefense + ";" + speed + ";" + exp;
+    }
+
     public void unEquip(Weapon w){
         this.weapon = null;
     }

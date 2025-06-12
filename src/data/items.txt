@@ -1,0 +1,7 @@
+0;Cookie;6;3;true
+0;Magic_Pudding;20;50;0
+1;Bomb;100;80;2
+2;Cracked_Bat;6;10;0;.9;.1
+3;Ribbon;20;80;10
+4;Armor;50;200;0
+5;Gold_Ring;10;500;20

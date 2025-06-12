@@ -1,4 +1,8 @@
-import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Run {
@@ -6,19 +10,12 @@ public class Run {
     static Scanner readIntInput = new Scanner(System.in);
     static String characterName;
     static Character[] characters = new Character[4];
+    static ArrayList<AItem> itemList = new ArrayList<>();
+    static ArrayList<Enemy> enemyList = new ArrayList<>();
 
-    public static void runMain(){
-        Character a = new Character("Cloud", 200, 20, 15, 20, 5, 15, 10, 0);
-        Character b = new Character("Barret", 200, 20, 15, 20, 5, 15, 10, 0);
-        Character c = new Character("Tifa", 200, 20, 15, 20, 5, 15, 10, 0);
-        readCharacter(a);
-        characters[0] = a;
-        characters[1] = b;
-        characters[3] = c;
-        deleteCharacter();
-        deleteCharacter();
-        deleteCharacter();
-        deleteCharacter();
+    public static void runMain() throws IOException {
+        loadCharacters();
+        System.out.println(characters[0].toString());
     }
 
     public static Character createCharacter() {
@@ -127,6 +124,119 @@ public class Run {
                 default:
                     break;
             }
+        }
+    }
+
+    public static void saveCharacters() throws IOException {
+        if(characters[0] == null && characters[1] == null && characters[2] == null && characters[3] == null)
+            System.out.println("Brak postaci do zapisania!");
+        else{
+            try {
+                File saveFile = new File("src/data/save.txt");
+                FileWriter saveFileWriter = new FileWriter(saveFile);
+                for (int i = 0; i < characters.length; i++){
+                    if(characters[i] == null) continue;
+                    else{
+                        saveFileWriter.write(characters[i].saveToFile() + "\n");
+                    }
+                }
+                saveFileWriter.close();
+                System.out.println("Success!");
+            }
+            catch (IOException e){
+                System.out.println("Wystąpił błąd!");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void loadCharacters() throws IOException {
+        try {
+            String characterName;
+            int hp, mp, attack, defense, magicAttack, magicDefense, speed, exp, i = 0;
+            File items = new File("src/data/save.txt");
+            Scanner saveReader = new Scanner(items);
+            while (saveReader.hasNextLine()) {
+                String data = saveReader.nextLine();
+                String[] dataArray = data.split(";");
+                characterName = dataArray[0];
+                hp = Integer.parseInt(dataArray[1]);
+                mp = Integer.parseInt(dataArray[2]);
+                attack = Integer.parseInt(dataArray[3]);
+                defense = Integer.parseInt(dataArray[4]);
+                magicAttack = Integer.parseInt(dataArray[5]);
+                magicDefense = Integer.parseInt(dataArray[6]);
+                speed = Integer.parseInt(dataArray[7]);
+                exp = Integer.parseInt(dataArray[8]);
+                characters[i] = new Character(characterName, hp, mp, attack, defense, magicAttack, magicDefense, speed, exp);
+                i++;
+                }
+            saveReader.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Nie znaleziono pliku!");
+            e.printStackTrace();
+        }
+    }
+
+    public static DamageType parseDamageType(int i){
+        return switch (i) {
+            case 0 -> DamageType.ONE;
+            case 1 -> DamageType.ALL;
+            case 2 -> DamageType.SPLASH;
+            default -> throw new IllegalStateException("Błędne dane: " + i);
+        };
+    }
+
+    public static void readItems() throws FileNotFoundException {
+        try {
+            String itemName;
+            int value, sellValue, secondaryValue;
+            double accuracy, critChance;
+            boolean doesRecoverHP;
+            DamageType damageType;
+            File items = new File("src/data/items.txt");
+            Scanner itemsReader = new Scanner(items);
+            while (itemsReader.hasNextLine()) {
+                String data = itemsReader.nextLine();
+                String[] dataArray = data.split(";");
+                itemName = dataArray[1].replace("_", " ");
+                value = Integer.parseInt(dataArray[2]);
+                sellValue = Integer.parseInt(dataArray[3]);
+                switch (Integer.parseInt(dataArray[0])){
+                    case 0:
+                        doesRecoverHP = Boolean.parseBoolean(dataArray[4]);
+                        itemList.add(new HealingItem(itemName, value, sellValue, doesRecoverHP));
+                        break;
+                    case 1:
+                        damageType = parseDamageType(Integer.parseInt(dataArray[4]));
+                        itemList.add(new BattleItem(itemName, value, sellValue, damageType));
+                        break;
+                    case 2:
+                        secondaryValue = Integer.parseInt(dataArray[4]);
+                        accuracy = Double.parseDouble(dataArray[5]);
+                        critChance = Double.parseDouble(dataArray[6]);
+                        itemList.add(new Weapon(itemName, value, sellValue, secondaryValue, accuracy, critChance));
+                        break;
+                    case 3:
+                        secondaryValue = Integer.parseInt(dataArray[4]);
+                        itemList.add(new Head(itemName, value, sellValue, secondaryValue));
+                        break;
+                    case 4:
+                        secondaryValue = Integer.parseInt(dataArray[4]);
+                        itemList.add(new Body(itemName, value, sellValue, secondaryValue));
+                        break;
+                    case 5:
+                        secondaryValue = Integer.parseInt(dataArray[4]);
+                        itemList.add(new Accessory(itemName, value, sellValue, secondaryValue));
+                        break;
+                }
+            }
+            itemsReader.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Nie znaleziono pliku!");
+            e.printStackTrace();
         }
     }
 }

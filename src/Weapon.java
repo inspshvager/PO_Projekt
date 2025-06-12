@@ -1,8 +1,8 @@
 public class Weapon extends EquippableItem  implements Equip {
     private final double accuracy;
-    private final int critChance;
+    private final double critChance;
 
-    public Weapon(String name, int value, int sellValue, int secondaryValue, double accuracy, int critChance) {
+    public Weapon(String name, int value, int sellValue, int secondaryValue, double accuracy, double critChance) {
         super(name, value, sellValue, secondaryValue);
         this.accuracy = accuracy;
         this.critChance = critChance;
@@ -12,7 +12,7 @@ public class Weapon extends EquippableItem  implements Equip {
         return accuracy;
     }
 
-    public int getCritChance() {
+    public double getCritChance() {
         return critChance;
     }
 
