@@ -97,6 +97,10 @@ public abstract class Entity {
         this.name = name;
     }
 
+    public int getExp() {
+        return exp;
+    }
+
     @Override
     public String toString() {
         return "Entity{" +

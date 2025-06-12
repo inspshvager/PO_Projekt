@@ -59,4 +59,30 @@ public class Character extends Entity{
     public void setActionList(List<Action> actionList) {
         this.actionList = actionList;
     }
+
+    public void set(int hp, int mp, int attack, int defense, int magicAttack, int magicDefense, int speed){
+        this.hp = hp;
+        this.mp = mp;
+        this.attack = attack;
+        this.defense = defense;
+        this.magicAttack = magicAttack;
+        this.magicDefense = magicDefense;
+        this.speed = speed;
+    }
+
+    public void unEquip(Weapon w){
+        this.weapon = null;
+    }
+
+    public void unEquip(Head h){
+        this.head = null;
+    }
+
+    public void unEquip(Body b){
+        this.body = null;
+    }
+
+    public void unEquip(Accessory a){
+        this.accessory = null;
+    }
 }

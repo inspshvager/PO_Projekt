@@ -1,4 +1,3 @@
 public interface Equip {
-    void equip();
-    void unEquip();
+    void equip(Character c);
 }

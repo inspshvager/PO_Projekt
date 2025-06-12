@@ -1,4 +1,4 @@
-public class Weapon extends EquippableItem{
+public class Weapon extends EquippableItem  implements Equip {
     private final double accuracy;
     private final int critChance;
 
@@ -14,5 +14,10 @@ public class Weapon extends EquippableItem{
 
     public int getCritChance() {
         return critChance;
+    }
+
+    @Override
+    public void equip(Character c) {
+        c.setWeapon(this);
     }
 }

@@ -1,4 +1,4 @@
-public abstract class EquippableItem extends AItem {
+public abstract class EquippableItem extends AItem{
     protected final int secondaryValue;
 
     public EquippableItem(String name, int value, int sellValue, int secondaryValue) {
