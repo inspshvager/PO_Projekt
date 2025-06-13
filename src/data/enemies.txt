@@ -1,0 +1,50 @@
+Zwinięty_Wąż;20;5;2;1;4
+Zombie;80;20;1;84;12
+Duch;70;25;11;74;20
+Pies_Uciekinier;24;6;4;4;6
+Kret_Mondo;41;10;8;24;11
+Szlam;30;5;2;10;3
+Goblin;50;10;5;20;8
+Wilk;60;12;8;25;10
+Szkielet;70;15;4;30;12
+Ork;120;20;3;50;20
+Mroczny_Czarnodziej;80;25;6;70;35
+Trol;200;30;2;100;50
+Wampir;150;35;10;120;75
+Wiwerna;180;40;12;150;100
+Lord_Demonów;500;60;8;500;250
+Wędrujący_Zły_Grzyb;40;7;4;14;5
+Starman_Jr.;120;20;6;60;30
+Glina;80;15;5;35;15
+Trylionletni_Pęd;350;40;2;180;85
+Frankystein_Mark II;160;23;4;70;30
+Zjawa_z_Domu Towarowego;220;28;6;90;50
+Złe_Oko;130;22;8;65;35
+Jaskiniowiec;200;30;2;100;60
+Elektro Widmo;300;50;9;200;100
+Fobby;20;2;12;8;1
+Foppy;25;3;10;9;1
+Mumia;250;35;3;120;55
+Titaniczna Mrówka;180;26;4;85;40
+Super_Starman;400;55;10;250;120
+Zły_Mani-Mani;280;32;6;140;75
+Chciwa_Mysz;75;15;10;30;10
+Tyranozaur;350;45;7;200;80
+Hiper_Obrotowy_Robot;200;35;10;110;50
+Ostateczny_Starman;450;60;11;300;120
+Terytorialny_Dąb;120;18;3;50;20
+Mistrzowski_Robak_Kryminalista;80;1;20;1000;10
+Wirujący_Robot;90;20;6;40;20
+Ogień_Pochłaniający_Dusze;250;40;8;130;55
+Chomposaur;400;55;5;260;100
+Przewodząca_Dusza;150;26;6;75;35
+Małe_UFO;60;14;10;28;10
+Starszy_Nietoperz;110;18;5;48;22
+Frank;60;10;4;50;20
+Kapitan_Bomba;140;30;5;696;55
+Szczur_Zaraza-Zagłada;452;48;5;5567;90
+Diamentowy_Pies;1600;75;10;18444;0
+Grzmot_i_Sztorm;850;68;6;9611;95
+Clayman;300;35;3;150;0
+Mecha-Drago;320;40;3;150;0
+Stalowy_Mecha-goryl;650;50;6;450;0

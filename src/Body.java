@@ -1,7 +1,7 @@
 public class Body extends EquippableItem implements Equip{
 
-    public Body(String name, int value, int sellValue, int secondaryValue) {
-        super(name, value, sellValue, secondaryValue);
+    public Body(String name, int value, int sellValue) {
+        super(name, value, sellValue);
     }
 
     @Override

@@ -1,20 +1,9 @@
 public class Enemy extends Entity{
-    private final Action[] actions;
-    private final boolean doesAttackRandomly;
     private final int money;
 
-    public Enemy(Action[] actions, boolean doesAttackRandomly, int money) {
-        this.actions = actions;
-        this.doesAttackRandomly = doesAttackRandomly;
+    public Enemy(String name, int hp, int attack, int speed, int exp, int money) {
+        super(name, hp, attack, speed, exp);
         this.money = money;
-    }
-
-    public Action[] getActions() {
-        return actions;
-    }
-
-    public boolean isDoesAttackRandomly() {
-        return doesAttackRandomly;
     }
 
     public int getMoney() {

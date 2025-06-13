@@ -1,15 +1,21 @@
 import java.util.List;
 
 public class Character extends Entity{
+    private int mp;
+    private int defense;
+    private int magicAttack;
+    private int magicDefense;
     private Weapon weapon = null;
     private Head head = null;
     private Body body = null;
     private Accessory accessory = null;
-    private AItem[] inventory = new AItem[8];
-    private List<Action> actionList = null;
 
-    public Character(String name, int hp, int mp, int attack, int defense, int magicAttack, int magicDefense, int speed, int exp) {
-        super(name, hp, mp, attack, defense, magicAttack, magicDefense, speed, exp);
+    public Character(String name, int hp, int mp, int attack, int defense, int magicAttack, int magicDefense, int speed, int exp){
+        super(name, hp, attack, speed, exp);
+        this.mp = mp;
+        this.defense = defense;
+        this.magicAttack = magicAttack;
+        this.magicDefense = magicDefense;
     }
 
     public Weapon getWeapon() {
@@ -44,22 +50,6 @@ public class Character extends Entity{
         this.accessory = accessory;
     }
 
-    public AItem[] getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(AItem[] inventory) {
-        this.inventory = inventory;
-    }
-
-    public List<Action> getActionList() {
-        return actionList;
-    }
-
-    public void setActionList(List<Action> actionList) {
-        this.actionList = actionList;
-    }
-
     public void set(int hp, int mp, int attack, int defense, int magicAttack, int magicDefense, int speed){
         this.hp = hp;
         this.mp = mp;
@@ -88,5 +78,40 @@ public class Character extends Entity{
 
     public void unEquip(Accessory a){
         this.accessory = null;
+    }
+
+    public int getMp() {
+        return mp;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getMagicAttack() {
+        return magicAttack;
+    }
+
+    public int getMagicDefense() {
+        return magicDefense;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName() +"{" +
+                "mp=" + mp +
+                ", defense=" + defense +
+                ", magicAttack=" + magicAttack +
+                ", magicDefense=" + magicDefense +
+                ", weapon=" + weapon +
+                ", head=" + head +
+                ", body=" + body +
+                ", accessory=" + accessory +
+                ", name='" + name + '\'' +
+                ", hp=" + hp +
+                ", attack=" + attack +
+                ", speed=" + speed +
+                ", exp=" + exp +
+                '}';
     }
 }

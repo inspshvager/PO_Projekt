@@ -1,7 +1,7 @@
 public class Accessory extends EquippableItem implements Equip{
 
-    public Accessory(String name, int value, int sellValue, int secondaryValue) {
-        super(name, value, sellValue, secondaryValue);
+    public Accessory(String name, int value, int sellValue) {
+        super(name, value, sellValue);
     }
 
     @Override

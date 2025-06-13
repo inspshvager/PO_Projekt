@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Run {
@@ -12,10 +13,15 @@ public class Run {
     static Character[] characters = new Character[4];
     static ArrayList<AItem> itemList = new ArrayList<>();
     static ArrayList<Enemy> enemyList = new ArrayList<>();
+    static ArrayList<AItem> inventory = new ArrayList<>();
+    static int money = 100;
 
     public static void runMain() throws IOException {
-        loadCharacters();
-        System.out.println(characters[0].toString());
+        readEnemies();
+        readItems();
+        System.out.println(itemList);
+        startMenu();
+        mainMenu();
     }
 
     public static Character createCharacter() {
@@ -97,18 +103,21 @@ public class Run {
         }
     }
 
-    public static void deleteCharacter(){
-        if(characters[0] == null && characters[1] == null && characters[2] == null && characters[3] == null)
-            System.out.println("Brak postaci do usunięcia!");
-        else{
+    public static void deleteCharacter() throws LastCharacterException{
+        try {
+            int nullCounter = 0;
+            for(int c = 0; c < characters.length; c++){
+                if(characters[c] == null) nullCounter++;
+            }
+            if(nullCounter >= 3) throw new LastCharacterException("Nie można usunąć ostatniej postaci!");
             System.out.println("Wybierz postać do usunięcia:");
-            for(int i = 0; i < characters.length; i++){
-                if(characters[i] == null) continue;
+            for (int i = 0; i < characters.length; i++) {
+                if (characters[i] == null) continue;
                 else {
-                    System.out.println((i+1) + ". " + characters[i].getName());
+                    System.out.println((i + 1) + ". " + characters[i].getName());
                 }
             }
-            switch(readIntInput.nextInt()){
+            switch (readIntInput.nextInt()) {
                 case 1:
                     characters[0] = null;
                     break;
@@ -124,6 +133,9 @@ public class Run {
                 default:
                     break;
             }
+        }
+        catch (LastCharacterException e){
+            e.printStackTrace();
         }
     }
 
@@ -179,20 +191,10 @@ public class Run {
         }
     }
 
-    public static DamageType parseDamageType(int i){
-        return switch (i) {
-            case 0 -> DamageType.ONE;
-            case 1 -> DamageType.ALL;
-            case 2 -> DamageType.SPLASH;
-            default -> throw new IllegalStateException("Błędne dane: " + i);
-        };
-    }
-
     public static void readItems() throws FileNotFoundException {
         try {
             String itemName;
             int value, sellValue, secondaryValue;
-            double accuracy, critChance;
             boolean doesRecoverHP;
             DamageType damageType;
             File items = new File("src/data/items.txt");
@@ -203,32 +205,29 @@ public class Run {
                 itemName = dataArray[1].replace("_", " ");
                 value = Integer.parseInt(dataArray[2]);
                 sellValue = Integer.parseInt(dataArray[3]);
-                switch (Integer.parseInt(dataArray[0])){
-                    case 0:
+                switch (ItemType.parseString(dataArray[0])){
+                    case HEALING:
                         doesRecoverHP = Boolean.parseBoolean(dataArray[4]);
                         itemList.add(new HealingItem(itemName, value, sellValue, doesRecoverHP));
                         break;
-                    case 1:
-                        damageType = parseDamageType(Integer.parseInt(dataArray[4]));
+                    case BATTLE:
+                        damageType = DamageType.parseString(dataArray[4]);
                         itemList.add(new BattleItem(itemName, value, sellValue, damageType));
                         break;
-                    case 2:
-                        secondaryValue = Integer.parseInt(dataArray[4]);
-                        accuracy = Double.parseDouble(dataArray[5]);
-                        critChance = Double.parseDouble(dataArray[6]);
-                        itemList.add(new Weapon(itemName, value, sellValue, secondaryValue, accuracy, critChance));
+                    case WEAPON:
+                        itemList.add(new Weapon(itemName, value, sellValue));
                         break;
-                    case 3:
-                        secondaryValue = Integer.parseInt(dataArray[4]);
-                        itemList.add(new Head(itemName, value, sellValue, secondaryValue));
+                    case HEAD:
+                        secondaryValue = Integer.parseInt(dataArray[3]);
+                        itemList.add(new Head(itemName, value, sellValue));
                         break;
-                    case 4:
-                        secondaryValue = Integer.parseInt(dataArray[4]);
-                        itemList.add(new Body(itemName, value, sellValue, secondaryValue));
+                    case BODY:
+                        secondaryValue = Integer.parseInt(dataArray[3]);
+                        itemList.add(new Body(itemName, value, sellValue));
                         break;
-                    case 5:
-                        secondaryValue = Integer.parseInt(dataArray[4]);
-                        itemList.add(new Accessory(itemName, value, sellValue, secondaryValue));
+                    case ACCESSORY:
+                        secondaryValue = Integer.parseInt(dataArray[3]);
+                        itemList.add(new Accessory(itemName, value, sellValue));
                         break;
                 }
             }
@@ -237,6 +236,222 @@ public class Run {
         catch (FileNotFoundException e) {
             System.out.println("Nie znaleziono pliku!");
             e.printStackTrace();
+        }
+    }
+
+    public static void readEnemies() throws FileNotFoundException {
+        try {
+            String enemyName;
+            int hp, attack, speed, exp, money;
+            File enemies = new File("src/data/enemies.txt");
+            Scanner enemyReader = new Scanner(enemies);
+            while (enemyReader.hasNextLine()) {
+                String data = enemyReader.nextLine();
+                String[] dataArray = data.split(";");
+                enemyName = dataArray[0].replace("_", " ");
+                hp = Integer.parseInt(dataArray[1]);
+                attack = Integer.parseInt(dataArray[2]);
+                speed = Integer.parseInt(dataArray[3]);
+                exp = Integer.parseInt(dataArray[4]);
+                money = Integer.parseInt(dataArray[5]);
+                enemyList.add(new Enemy(enemyName, hp, attack, speed, exp, money));
+            }
+            enemyReader.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Nie znaleziono pliku!");
+            e.printStackTrace();
+        }
+    }
+
+    public static void startMenu() throws IOException {
+        System.out.println("Witaj w konsolowej grze RPG!");
+        System.out.println("Wybierz co chcesz zrobić:");
+        System.out.println("1. Nowa gra\n2. Wczytaj grę\n3. Pomoc\n4. Wyjście.");
+        switch (readIntInput.nextInt()){
+            case 1:
+                newGame();
+                break;
+            case 2:
+                loadCharacters();
+                break;
+            case 3:
+                helpMenu();
+                break;
+            default:
+                System.exit(0);
+        }
+    }
+
+    public static void newGame(){
+        System.out.println("Stwórz 4 postacie:");
+        characters[0] = createCharacter();
+        characters[1] = createCharacter();
+        characters[2] = createCharacter();
+        characters[3] = createCharacter();
+        for (Character x : characters){
+            System.out.println(x.getName());
+        }
+    }
+
+    public static void helpMenu() throws IOException {
+        System.out.println("Gra polega na tworzeniu postaci, wybieraniu im klasy oraz walczeniu z przeciwnikami.");
+        System.out.println("Postacie mogą wyposarzać się w różne bronie oraz zdobywać doświadczenie pokonując przeciwników.");
+        System.out.println("Wybierz opcje 'Nowa gra', aby rozpocząć nową grę od początku.");
+        System.out.println("Wybierz opcję 'Wczytaj grę', aby wczytać grę i postęp z istniejącego pliku tekstowego.");
+    }
+
+    public static void mainMenu() throws IOException {
+        while (true){
+        System.out.println("Wybierz jedną z opcji:");
+        System.out.println("1. Walka\n2. Drużyna\n3. Sklep\n4. Zapis\n5. Wyjście");
+        switch (readIntInput.nextInt()) {
+            case 1:
+                //battle();
+            case 2:
+                teamStatus();
+                break;
+            case 3:
+                shop();
+                break;
+            case 4:
+                saveCharacters();
+                break;
+            case 5:
+                System.exit(0);
+        }
+        }
+    }
+
+    public static void teamStatus(){
+        System.out.println("Wybierz członka drużyny:");
+        int i;
+        for (i = 0; i < characters.length; i++){
+            if(characters[i] == null) continue;
+            else{
+                System.out.println((i+1) + ". " + characters[i].getName());
+            }
+        }
+        switch (readIntInput.nextInt()){
+            case 1:
+                i = 0;
+                break;
+            case 2:
+                i = 1;
+                break;
+            case 3:
+                i = 2;
+                break;
+            case 4:
+                i = 3;
+                break;
+            default:
+                break;
+        }
+        readCharacter(characters[i]);
+        System.out.println("Wybierz co chcesz zrobić:");
+        System.out.println("1. Wyposarzenie\n2. Edycja\n3. Usuń\n4. Wyjście");
+        switch (readIntInput.nextInt()){
+            case 1:
+                if(inventory.isEmpty()){
+                    System.out.println("Brak przedmiotów do wyposarzenia!");
+                }
+                else{
+                    for (int j = 0; j < inventory.size(); j++){
+                        System.out.println((j+1) + ". " + inventory.get(j).getName());
+                    }
+                    System.out.println("Wybierz przedmiot:");
+                    int choice = readIntInput.nextInt();
+                    if (inventory.get(choice-1) instanceof Weapon || inventory.get(choice-1) instanceof Head ||
+                            inventory.get(choice-1) instanceof Body || inventory.get(choice-1) instanceof Accessory){
+                        ((Equip) inventory.get(choice-1)).equip(characters[i]);
+                        System.out.println("Wyposarzono przedmiot!");
+                    }
+                }
+                break;
+            case 2:
+                updateCharacter(characters[i]);
+            case 3:
+                deleteCharacter();
+            default:
+                break;
+        }
+    }
+
+    public static void shop(){
+        Random random = new Random();
+        AItem[] shopItems = new AItem[6];
+        for (int i = 0; i < 6; i++) {
+            shopItems[i] = itemList.get(random.nextInt(itemList.size()));
+        }
+        System.out.println("Witaj w sklepie!");
+        System.out.println("Mam do zaoferowania dziś takie oto przedmioty!");
+        for (int i = 0; i < 6; i++) {
+            System.out.println((i+1) + ". " + shopItems[i].getName() + ", $" + shopItems[i].getSellValue());
+        }
+        switch (readIntInput.nextInt()) {
+            case 1:
+                if(money >= shopItems[0].getSellValue()){
+                    money -= shopItems[0].getSellValue();
+                    inventory.add(shopItems[0]);
+                    System.out.println("Dziękuje, zapraszam ponownie!");
+                }
+                else{
+                    System.out.println("Brak wystarczająco pieniędzy!");
+                }
+                break;
+            case 2:
+                if(money >= shopItems[1].getSellValue()){
+                    money -= shopItems[1].getSellValue();
+                    inventory.add(shopItems[1]);
+                    System.out.println("Dziękuje, zapraszam ponownie!");
+                }
+                else{
+                    System.out.println("Brak wystarczająco pieniędzy!");
+                }
+                break;
+            case 3:
+                if(money >= shopItems[2].getSellValue()){
+                    money -= shopItems[2].getSellValue();
+                    inventory.add(shopItems[2]);
+                    System.out.println("Dziękuje, zapraszam ponownie!");
+                }
+                else{
+                    System.out.println("Brak wystarczająco pieniędzy!");
+                }
+                break;
+            case 4:
+                if(money >= shopItems[3].getSellValue()){
+                    money -= shopItems[3].getSellValue();
+                    inventory.add(shopItems[3]);
+                    System.out.println("Dziękuje, zapraszam ponownie!");
+                }
+                else{
+                    System.out.println("Brak wystarczająco pieniędzy!");
+                }
+                break;
+            case 5:
+                if(money >= shopItems[4].getSellValue()){
+                    money -= shopItems[4].getSellValue();
+                    inventory.add(shopItems[4]);
+                    System.out.println("Dziękuje, zapraszam ponownie!");
+                }
+                else{
+                    System.out.println("Brak wystarczająco pieniędzy!");
+                }
+                break;
+            case 6:
+                if(money >= shopItems[5].getSellValue()){
+                    money -= shopItems[5].getSellValue();
+                    inventory.add(shopItems[5]);
+                    System.out.println("Dziękuje, zapraszam ponownie!");
+                }
+                else{
+                    System.out.println("Brak wystarczająco pieniędzy!");
+                }
+                break;
+            default:
+                break;
         }
     }
 }

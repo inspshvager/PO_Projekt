@@ -1,7 +1,7 @@
 public class Head extends EquippableItem implements Equip{
 
-    public Head(String name, int value, int sellValue, int secondaryValue) {
-        super(name, value, sellValue, secondaryValue);
+    public Head(String name, int value, int sellValue) {
+        super(name, value, sellValue);
     }
 
     @Override
