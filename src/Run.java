@@ -7,23 +7,33 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Run {
+    // Statyczne pola do wczytywania danych od użytkownika
     static Scanner readStringInput = new Scanner(System.in);
     static Scanner readIntInput = new Scanner(System.in);
     static String characterName;
+
+    // Listy i tablica przechowujące dane o przedmiotach, przeciwnikach,
+    // drużynie oraz ewkipunku
     static Character[] characters = new Character[4];
     static ArrayList<AItem> itemList = new ArrayList<>();
     static ArrayList<Enemy> enemyList = new ArrayList<>();
     static ArrayList<AItem> inventory = new ArrayList<>();
     static int money = 100;
 
+    // Metoda rozpoczynająca gre
     public static void runMain() throws IOException {
+        // Wczytanie danych z plików
         readEnemies();
         readItems();
-        System.out.println(itemList);
+
+        // Menu startowe - Nowa gra, kontynuacja, pomoc, itd.
         startMenu();
+
+        // Menu główne gry
         mainMenu();
     }
 
+    // Metoda do tworzenia nowej postaci z poziomu użytkownika
     public static Character createCharacter() {
         System.out.println("Podaj imię postaci");
         characterName = readStringInput.nextLine();
@@ -50,6 +60,7 @@ public class Run {
         while (true);
     }
 
+    // Metoda wypisująca dane postaci
     public static void readCharacter(Character c){
         System.out.println(c.getName());
         System.out.println("==========");
@@ -63,6 +74,7 @@ public class Run {
                 "\nDoświadczenie: " + c.getExp());
     }
 
+    // Metoda aktualizująca nazwę oraz klasę postaci
     public static void updateCharacter(Character c){
         System.out.println("Wybierz co chcesz zmienić:");
         System.out.println("""
@@ -103,11 +115,12 @@ public class Run {
         }
     }
 
+    // Metoda usuwająco postać
     public static void deleteCharacter() throws LastCharacterException{
         try {
             int nullCounter = 0;
-            for(int c = 0; c < characters.length; c++){
-                if(characters[c] == null) nullCounter++;
+            for (Character character : characters) {
+                if (character == null) nullCounter++;
             }
             if(nullCounter >= 3) throw new LastCharacterException("Nie można usunąć ostatniej postaci!");
             System.out.println("Wybierz postać do usunięcia:");
@@ -139,7 +152,8 @@ public class Run {
         }
     }
 
-    public static void saveCharacters() throws IOException {
+    // Metoda zapisująca stan postaci do pliku tekstowego
+    public static void saveCharacters() {
         if(characters[0] == null && characters[1] == null && characters[2] == null && characters[3] == null)
             System.out.println("Brak postaci do zapisania!");
         else{
@@ -162,7 +176,8 @@ public class Run {
         }
     }
 
-    public static void loadCharacters() throws IOException {
+    // Metoda wczytująca stan postaci z pliku tekstowego
+    public static void loadCharacters() {
         try {
             String characterName;
             int hp, mp, attack, defense, magicAttack, magicDefense, speed, exp, i = 0;
@@ -191,7 +206,8 @@ public class Run {
         }
     }
 
-    public static void readItems() throws FileNotFoundException {
+    // Metoda wczytująca wszystkie przedmioty z pliku tekstowego
+    public static void readItems() {
         try {
             String itemName;
             int value, sellValue, secondaryValue;
@@ -239,7 +255,8 @@ public class Run {
         }
     }
 
-    public static void readEnemies() throws FileNotFoundException {
+    // Metoda wczytująca dane wszystkich przeciwników z pliku tekstowego
+    public static void readEnemies() {
         try {
             String enemyName;
             int hp, attack, speed, exp, money;
@@ -264,6 +281,7 @@ public class Run {
         }
     }
 
+    // Metoda uruchamiająca menu startowe
     public static void startMenu() throws IOException {
         System.out.println("Witaj w konsolowej grze RPG!");
         System.out.println("Wybierz co chcesz zrobić:");
@@ -283,6 +301,7 @@ public class Run {
         }
     }
 
+    // Metoda rozpoczynająca nową grę
     public static void newGame(){
         System.out.println("Stwórz 4 postacie:");
         characters[0] = createCharacter();
@@ -294,13 +313,15 @@ public class Run {
         }
     }
 
-    public static void helpMenu() throws IOException {
+    // Metoda wypisująca instrukcje gry
+    public static void helpMenu(){
         System.out.println("Gra polega na tworzeniu postaci, wybieraniu im klasy oraz walczeniu z przeciwnikami.");
         System.out.println("Postacie mogą wyposarzać się w różne bronie oraz zdobywać doświadczenie pokonując przeciwników.");
         System.out.println("Wybierz opcje 'Nowa gra', aby rozpocząć nową grę od początku.");
         System.out.println("Wybierz opcję 'Wczytaj grę', aby wczytać grę i postęp z istniejącego pliku tekstowego.");
     }
 
+    // Metoda wypisująca główne menu użytkownika
     public static void mainMenu() throws IOException {
         while (true){
         System.out.println("Wybierz jedną z opcji:");
@@ -323,6 +344,7 @@ public class Run {
         }
     }
 
+    // Metoda do obsługi drużyny
     public static void teamStatus(){
         System.out.println("Wybierz członka drużyny:");
         int i;
@@ -378,6 +400,7 @@ public class Run {
         }
     }
 
+    // Metoda do obsługi sklepu
     public static void shop(){
         Random random = new Random();
         AItem[] shopItems = new AItem[6];

@@ -1,3 +1,5 @@
+// Typ wyliczeniowy DamageType używany do łatwiejszego rozróżniania przedmiotów
+// do wczytywania z plików tekstowych
 public enum DamageType {
     ONE,
     ALL,

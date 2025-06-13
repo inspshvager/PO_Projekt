@@ -1,5 +1,3 @@
-import java.util.List;
-
 public class Character extends Entity{
     private int mp;
     private int defense;
@@ -60,10 +58,16 @@ public class Character extends Entity{
         this.speed = speed;
     }
 
+    // Przekształca pola klasy na ciąg znaków, tak aby można było
+    // łatwo od razu zapisać ten ciąg do pliku tekstowego i ewentualnie
+    // później odczytać
     public String saveToFile(){
         return name + ";" + hp + ";" + mp + ";" + attack + ";" + defense + ";" + magicAttack + ";" + magicDefense + ";" + speed + ";" + exp;
     }
 
+
+    // Przeciążone metody 'unEquip'
+    // w zależności od typu przedmiotu, który chcemy zdjąć
     public void unEquip(Weapon w){
         this.weapon = null;
     }

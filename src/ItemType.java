@@ -1,3 +1,5 @@
+// Typ wyliczeniowy ItemType używany do łatwiejszego rozróżniania przedmiotów
+// do wczytywania z plików tekstowych
 public enum ItemType {
     HEALING,
     BATTLE,
