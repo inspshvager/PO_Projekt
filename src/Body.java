@@ -1,4 +1,4 @@
-public class Body extends EquippableItem implements Equip{
+public class Body extends AItem implements Equip{
 
     public Body(String name, int value, int sellValue) {
         super(name, value, sellValue);
@@ -7,5 +7,10 @@ public class Body extends EquippableItem implements Equip{
     @Override
     public void equip(Character c) {
         c.setBody(this);
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }

@@ -13,36 +13,16 @@ public abstract class Entity {
         this.exp = exp;
     }
 
-    public Entity() {
-        this.name = "Unknown";
-        this.hp = 1;
-        this.attack = 1;
-        this.speed = 1;
-        this.exp = 1;
-    }
-
     public int getHp() {
         return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
     }
 
     public int getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
     public int getSpeed() {
         return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
     }
 
     public String getName() {

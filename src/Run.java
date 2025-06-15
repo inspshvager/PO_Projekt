@@ -1,5 +1,4 @@
 import java.io.IOException;
-
 public class Run {
     // Metoda rozpoczynająca gre
     public static void runMain() throws IOException {

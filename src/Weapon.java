@@ -1,4 +1,4 @@
-public class Weapon extends EquippableItem  implements Equip {
+public class Weapon extends AItem  implements Equip {
     public Weapon(String name, int value, int sellValue) {
         super(name, value, sellValue);
     }
@@ -6,5 +6,10 @@ public class Weapon extends EquippableItem  implements Equip {
     @Override
     public void equip(Character c) {
         c.setWeapon(this);
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }

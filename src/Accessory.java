@@ -1,4 +1,4 @@
-public class Accessory extends EquippableItem implements Equip{
+public class Accessory extends AItem implements Equip{
 
     public Accessory(String name, int value, int sellValue) {
         super(name, value, sellValue);
@@ -7,5 +7,10 @@ public class Accessory extends EquippableItem implements Equip{
     @Override
     public void equip(Character c) {
         c.setAccessory(this);
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }
